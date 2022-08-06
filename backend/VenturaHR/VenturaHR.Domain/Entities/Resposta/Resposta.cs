@@ -11,5 +11,7 @@ namespace VenturaHR.Domain.Entities.Resposta
         public DateTime RespostaData { get; set; }
         
         public Decimal Indice { get; set; }
+
+        public virtual ICollection<RespostaCriterio> Criterios { get; set; }
     }
 }
