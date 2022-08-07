@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VenturaHR.Domain.Entities.Usuario;
 using VenturaHR.Domain.Interfaces;
 
 namespace VenturaHR.Domain.Entities.Resposta
@@ -8,9 +9,13 @@ namespace VenturaHR.Domain.Entities.Resposta
     {
         public int Id { get; set; }
 
+        public virtual Candidato Candidato { get; set; }
+
+        public int CandidatoId { get; set; }
+
         public DateTime RespostaData { get; set; }
         
-        public Decimal Indice { get; set; }
+        public decimal Indice { get; set; }
 
         public virtual ICollection<RespostaCriterio> Criterios { get; set; }
     }

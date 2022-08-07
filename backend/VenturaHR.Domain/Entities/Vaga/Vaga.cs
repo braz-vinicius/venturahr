@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using VenturaHR.Domain.Entities.Usuario;
 using VenturaHR.Domain.Interfaces;
 
 namespace VenturaHR.Domain.Entities.Vaga
@@ -8,10 +10,17 @@ namespace VenturaHR.Domain.Entities.Vaga
     {
         public int Id { get; set; }
 
-        public string Cargo { get; set; }
+        public virtual Empresa Empresa { get; set; }
 
+        public int EmpresaId { get; set; }
+
+        [MaxLength(45)]
+        public string Cargo { get; set; }
+        
+        [MaxLength(45)]
         public string Cidade { get; set; }
 
+        [MaxLength(45)]
         public string FormaContratacao { get; set; }
 
         public DateTime DataExpiracao { get; set; }

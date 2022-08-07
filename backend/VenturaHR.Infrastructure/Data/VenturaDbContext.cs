@@ -13,6 +13,8 @@ namespace VenturaHR.Infrastructure.Data
     internal class VenturaDbContext : DbContext
     {
 
+        public DbSet<Usuario> Usuarios { get; set; }
+
         public DbSet<Empresa> Empresas { get; set; }
         
         public DbSet<Candidato> Candidatos { get; set; }
@@ -43,7 +45,14 @@ namespace VenturaHR.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Usuario>()
+                 .HasDiscriminator<UsuarioTipo>("Tipo")
+                 .HasValue<Usuario>(UsuarioTipo.Usuario)
+                 .HasValue<Administrador>(UsuarioTipo.Administrador)
+                 .HasValue<Candidato>(UsuarioTipo.Candidato)
+                 .HasValue<Empresa>(UsuarioTipo.Empresa);
+
+
         }
     }
 }

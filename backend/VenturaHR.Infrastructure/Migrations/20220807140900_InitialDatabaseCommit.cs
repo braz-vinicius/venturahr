@@ -5,62 +5,29 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace VenturaHR.Infrastructure.Migrations
 {
-    public partial class DatabaseMainTables : Migration
+    public partial class InitialDatabaseCommit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Administradores",
+                name: "Usuarios",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Endereco = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Administradores", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Candidatos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    Senha = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Endereco = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Telefone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Tipo = table.Column<int>(type: "int", nullable: false),
                     CPF = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Endereco = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Candidatos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Empresas",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     CNPJ = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RazaoSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Endereco = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    RazaoSocial = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Empresas", x => x.Id);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,14 +36,21 @@ namespace VenturaHR.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Cargo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FormaContratacao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmpresaId = table.Column<int>(type: "int", nullable: false),
+                    Cargo = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    Cidade = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    FormaContratacao = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
                     DataExpiracao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vagas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vagas_Usuarios_EmpresaId",
+                        column: x => x.EmpresaId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +59,7 @@ namespace VenturaHR.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CandidatoId = table.Column<int>(type: "int", nullable: false),
                     RespostaData = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Indice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     VagaId = table.Column<int>(type: "int", nullable: true)
@@ -92,6 +67,12 @@ namespace VenturaHR.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Respostas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Respostas_Usuarios_CandidatoId",
+                        column: x => x.CandidatoId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Respostas_Vagas_VagaId",
                         column: x => x.VagaId,
@@ -105,8 +86,8 @@ namespace VenturaHR.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Perfil = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Descricao = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: true),
+                    Perfil = table.Column<int>(type: "int", nullable: false),
                     Peso = table.Column<int>(type: "int", nullable: false),
                     VagaId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -146,6 +127,11 @@ namespace VenturaHR.Infrastructure.Migrations
                 column: "RespostaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Respostas_CandidatoId",
+                table: "Respostas",
+                column: "CandidatoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Respostas_VagaId",
                 table: "Respostas",
                 column: "VagaId");
@@ -154,19 +140,15 @@ namespace VenturaHR.Infrastructure.Migrations
                 name: "IX_VagaCriterios_VagaId",
                 table: "VagaCriterios",
                 column: "VagaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vagas_EmpresaId",
+                table: "Vagas",
+                column: "EmpresaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Administradores");
-
-            migrationBuilder.DropTable(
-                name: "Candidatos");
-
-            migrationBuilder.DropTable(
-                name: "Empresas");
-
             migrationBuilder.DropTable(
                 name: "RespostaCriterios");
 
@@ -178,6 +160,9 @@ namespace VenturaHR.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Vagas");
+
+            migrationBuilder.DropTable(
+                name: "Usuarios");
         }
     }
 }

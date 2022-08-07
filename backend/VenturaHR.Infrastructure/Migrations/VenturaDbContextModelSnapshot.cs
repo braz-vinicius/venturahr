@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VenturaHR.Infrastructure.Data;
 
@@ -12,10 +11,9 @@ using VenturaHR.Infrastructure.Data;
 namespace VenturaHR.Infrastructure.Migrations
 {
     [DbContext(typeof(VenturaDbContext))]
-    [Migration("20220806213812_DatabaseMainTables")]
-    partial class DatabaseMainTables
+    partial class VenturaDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +30,9 @@ namespace VenturaHR.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CandidatoId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Indice")
                         .HasColumnType("decimal(18,2)");
 
@@ -42,6 +43,8 @@ namespace VenturaHR.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CandidatoId");
 
                     b.HasIndex("VagaId");
 
@@ -66,7 +69,7 @@ namespace VenturaHR.Infrastructure.Migrations
                     b.ToTable("RespostaCriterios");
                 });
 
-            modelBuilder.Entity("VenturaHR.Domain.Entities.Usuario.Administrador", b =>
+            modelBuilder.Entity("VenturaHR.Domain.Entities.Usuario.Usuario", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,88 +78,33 @@ namespace VenturaHR.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Endereco")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Senha")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Telefone")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Administradores");
-                });
-
-            modelBuilder.Entity("VenturaHR.Domain.Entities.Usuario.Candidato", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Tipo")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CPF")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Endereco")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Senha")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telefone")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Candidatos");
-                });
+                    b.ToTable("Usuarios");
 
-            modelBuilder.Entity("VenturaHR.Domain.Entities.Usuario.Empresa", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CNPJ")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Endereco")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RazaoSocial")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Senha")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telefone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Empresas");
+                    b.HasDiscriminator<int>("Tipo").HasValue(1);
                 });
 
             modelBuilder.Entity("VenturaHR.Domain.Entities.Vaga.Vaga", b =>
@@ -168,18 +116,26 @@ namespace VenturaHR.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Cargo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
 
                     b.Property<string>("Cidade")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
 
                     b.Property<DateTime>("DataExpiracao")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("EmpresaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FormaContratacao")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmpresaId");
 
                     b.ToTable("Vagas");
                 });
@@ -193,10 +149,11 @@ namespace VenturaHR.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
 
-                    b.Property<string>("Perfil")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Perfil")
+                        .HasColumnType("int");
 
                     b.Property<int>("Peso")
                         .HasColumnType("int");
@@ -211,11 +168,49 @@ namespace VenturaHR.Infrastructure.Migrations
                     b.ToTable("VagaCriterios");
                 });
 
+            modelBuilder.Entity("VenturaHR.Domain.Entities.Usuario.Administrador", b =>
+                {
+                    b.HasBaseType("VenturaHR.Domain.Entities.Usuario.Usuario");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("VenturaHR.Domain.Entities.Usuario.Candidato", b =>
+                {
+                    b.HasBaseType("VenturaHR.Domain.Entities.Usuario.Usuario");
+
+                    b.Property<string>("CPF")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue(3);
+                });
+
+            modelBuilder.Entity("VenturaHR.Domain.Entities.Usuario.Empresa", b =>
+                {
+                    b.HasBaseType("VenturaHR.Domain.Entities.Usuario.Usuario");
+
+                    b.Property<string>("CNPJ")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RazaoSocial")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue(4);
+                });
+
             modelBuilder.Entity("VenturaHR.Domain.Entities.Resposta.Resposta", b =>
                 {
+                    b.HasOne("VenturaHR.Domain.Entities.Usuario.Candidato", "Candidato")
+                        .WithMany("Respostas")
+                        .HasForeignKey("CandidatoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("VenturaHR.Domain.Entities.Vaga.Vaga", null)
                         .WithMany("Respostas")
                         .HasForeignKey("VagaId");
+
+                    b.Navigation("Candidato");
                 });
 
             modelBuilder.Entity("VenturaHR.Domain.Entities.Resposta.RespostaCriterio", b =>
@@ -227,6 +222,17 @@ namespace VenturaHR.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Resposta");
+                });
+
+            modelBuilder.Entity("VenturaHR.Domain.Entities.Vaga.Vaga", b =>
+                {
+                    b.HasOne("VenturaHR.Domain.Entities.Usuario.Empresa", "Empresa")
+                        .WithMany("Vagas")
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Empresa");
                 });
 
             modelBuilder.Entity("VenturaHR.Domain.Entities.Vaga.VagaCriterio", b =>
@@ -250,6 +256,16 @@ namespace VenturaHR.Infrastructure.Migrations
                     b.Navigation("Criterios");
 
                     b.Navigation("Respostas");
+                });
+
+            modelBuilder.Entity("VenturaHR.Domain.Entities.Usuario.Candidato", b =>
+                {
+                    b.Navigation("Respostas");
+                });
+
+            modelBuilder.Entity("VenturaHR.Domain.Entities.Usuario.Empresa", b =>
+                {
+                    b.Navigation("Vagas");
                 });
 #pragma warning restore 612, 618
         }

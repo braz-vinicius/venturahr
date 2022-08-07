@@ -1,4 +1,5 @@
-﻿using VenturaHR.Domain.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using VenturaHR.Domain.Interfaces;
 
 namespace VenturaHR.Domain.Entities.Vaga
 {
@@ -6,9 +7,10 @@ namespace VenturaHR.Domain.Entities.Vaga
     {
         public int Id { get; set; }
 
+        [MaxLength(45)]
         public string Descricao { get; set; }
 
-        public string Perfil { get; set; }
+        public int Perfil { get; set; }
 
         public int Peso { get; set; }
 

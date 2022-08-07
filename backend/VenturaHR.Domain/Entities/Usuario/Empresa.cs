@@ -1,4 +1,5 @@
-﻿using VenturaHR.Domain.Interfaces;
+﻿using System.Collections.Generic;
+using VenturaHR.Domain.Interfaces;
 
 namespace VenturaHR.Domain.Entities.Usuario
 {
@@ -8,5 +9,6 @@ namespace VenturaHR.Domain.Entities.Usuario
 
         public string RazaoSocial { get; set; }
 
+        public virtual ICollection<Vaga.Vaga> Vagas { get; set; }
     }
 }
