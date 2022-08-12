@@ -31,6 +31,12 @@ namespace VenturaHR.Domain.Interfaces
         void DeleteById<T>(T id);
 
         /// <summary>
+        /// Creates or updates a <typeparamref name="TEntity"/>
+        /// </summary>
+        /// <param name="item"></param>
+        void CreateOrUpdate(TEntity item);
+
+        /// <summary>
         /// Updates an item from the repository
         /// </summary>
         /// <param name="item">Item to update from repository</param>
@@ -50,10 +56,16 @@ namespace VenturaHR.Domain.Interfaces
         IEnumerable<TEntity> GetAll();
 
         /// <summary>
+        /// Determines whether any element of a sequence satisfies a condition.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        bool HasAny(Func<TEntity, bool> value);
+
+        /// <summary>
         /// Get all elements of type {T} in repository
         /// </summary>
         /// <returns>List of selected elements</returns>
         IEnumerable<TEntity> FindWhere(Expression<Func<TEntity, bool>> filter, params string[] includeEntities);
-
     }
 }

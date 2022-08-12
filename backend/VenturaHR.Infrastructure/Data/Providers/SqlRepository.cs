@@ -10,6 +10,11 @@ using VenturaHR.Infrastructure.Data.Extensions;
 
 namespace VenturaHR.Infrastructure.Data.Providers
 {
+    /// <summary>
+    /// Implementação base do Repository pattern para bancos de dados SQL.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
     public abstract class SqlRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         protected DbContext Context { get; }
@@ -45,6 +50,14 @@ namespace VenturaHR.Infrastructure.Data.Providers
             Context.SaveChanges();
         }
 
+        public void CreateOrUpdate(TEntity item)
+        {
+            var entity = DbSet.Find(item.Id);
+
+            if (entity != null)
+                DbSet.Update(item);
+        }
+
         public void Update(TEntity item)
         {
             DbSet.Update(item);
@@ -71,6 +84,11 @@ namespace VenturaHR.Infrastructure.Data.Providers
         public IEnumerable<TEntity> FindWhere(Expression<Func<TEntity, bool>> filter, params string[] includeEntities)
         {
             return DbSet.Where(filter).IncludeMultiple(includeEntities);
+        }
+
+        public bool HasAny(Func<TEntity, bool> predicate)
+        {
+            return DbSet.Any(predicate);
         }
     }
 

@@ -8,4 +8,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VenturaHR.Application\VenturaHR.Application.csproj" />
+    <ProjectReference Include="..\VenturaHR.Domain\VenturaHR.Domain.csproj" />
+    <ProjectReference Include="..\VenturaHR.Infrastructure\VenturaHR.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

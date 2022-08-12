@@ -1,7 +1,7 @@
 ﻿namespace VenturaHR.Domain.Interfaces
 {
     /// <summary>
-    /// Marker interface that represents a domain entity
+    /// Interface que representa um entidade de domínio com chave primária do tipo <typeparamref name="TKey"/>
     /// </summary>
     public interface IEntity<TKey>
     {

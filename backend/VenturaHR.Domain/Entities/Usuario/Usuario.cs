@@ -23,5 +23,6 @@ namespace VenturaHR.Domain.Entities.Usuario
         public string Telefone { get; set; }
 
         public UsuarioTipo Tipo { get; set; }
+
     }
 }

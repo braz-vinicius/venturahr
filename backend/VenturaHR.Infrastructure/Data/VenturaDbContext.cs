@@ -10,7 +10,7 @@ using VenturaHR.Domain.Entities.Vaga;
 
 namespace VenturaHR.Infrastructure.Data
 {
-    internal class VenturaDbContext : DbContext
+    public class VenturaDbContext : DbContext
     {
 
         public DbSet<Usuario> Usuarios { get; set; }

@@ -28,5 +28,6 @@ namespace VenturaHR.Domain.Entities.Vaga
         public virtual ICollection<VagaCriterio> Criterios { get; set; }
 
         public virtual ICollection<Resposta.Resposta> Respostas { get; set; }
+        public DateTime DataCriacao { get; set; }
     }
 }

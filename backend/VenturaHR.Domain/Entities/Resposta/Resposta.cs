@@ -13,7 +13,7 @@ namespace VenturaHR.Domain.Entities.Resposta
 
         public int CandidatoId { get; set; }
 
-        public DateTime RespostaData { get; set; }
+        public DateTime DataResposta { get; set; }
         
         public decimal Indice { get; set; }
 
