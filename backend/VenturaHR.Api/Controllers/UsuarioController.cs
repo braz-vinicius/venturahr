@@ -1,13 +1,14 @@
 ﻿namespace VenturaHR.Api.Controllers;
 
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using VenturaHR.Application.Authorization;
 using VenturaHR.Application.Helpers;
 using VenturaHR.Domain.Models;
 using VenturaHR.Domain.Services;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class UsuarioController : ControllerBase

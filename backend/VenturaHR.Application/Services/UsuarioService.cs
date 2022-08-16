@@ -6,6 +6,7 @@ using VenturaHR.Application.Helpers;
 using VenturaHR.Domain.Entities.Usuario;
 using VenturaHR.Domain.Interfaces;
 using VenturaHR.Domain.Models;
+using VenturaHR.Domain.Repositories;
 using VenturaHR.Domain.Services;
 using WebApi.Authorization;
 
@@ -16,7 +17,7 @@ public class UsuarioService : IUsuarioService
     private readonly IMapper _mapper;
 
     public UsuarioService(
-        IRepository<Usuario, int> context,
+        IUsuarioRepository context,
         IJwtUtils jwtUtils,
         IMapper mapper)
     {
@@ -58,7 +59,7 @@ public class UsuarioService : IUsuarioService
 
         var user = _mapper.Map<Usuario>(model);
 
-        user.Senha = BCrypt.HashPassword(model.Password);
+        user.Senha = BCrypt.HashPassword(model.Senha);
 
         _context.Add(user);
     }

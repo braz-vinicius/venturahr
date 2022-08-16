@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VenturaHR.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using VenturaHR.Infrastructure.Data;
 namespace VenturaHR.Infrastructure.Migrations
 {
     [DbContext(typeof(VenturaDbContext))]
-    partial class VenturaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220812214411_JwtAuthentication")]
+    partial class JwtAuthentication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
