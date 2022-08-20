@@ -17,5 +17,14 @@ export const useUsersStore = defineStore({
         .then((users) => (this.users = users))
         .catch((error) => (this.users = { error }))
     },
+    async register(form) {
+      return fetchWrapper.post(`${baseUrl}/register`, {
+        nome: form.nome,
+        email: form.email,
+        senha: form.senha,
+        cpf: form.cpf,
+        cnpj: form.cnpj,
+      })
+    },
   },
 })

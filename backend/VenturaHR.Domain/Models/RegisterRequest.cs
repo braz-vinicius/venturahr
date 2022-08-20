@@ -1,6 +1,7 @@
 namespace VenturaHR.Domain.Models;
 
 using System.ComponentModel.DataAnnotations;
+using VenturaHR.Domain.Entities.Usuario;
 
 public class RegisterRequest
 {
@@ -12,6 +13,9 @@ public class RegisterRequest
 
     [Required]
     public string Senha { get; set; }
+
+    [Required]
+    public UsuarioTipo Tipo { get; set; }
 
     public string Endereco { get; set; }
 

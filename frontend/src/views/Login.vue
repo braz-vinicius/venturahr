@@ -12,7 +12,7 @@ import { useAuthStore } from '@/stores'
               <CCardBody>
                 <CForm
                   :validated="validatedCustom01"
-                  @submit="onSubmit"
+                  @submit.prevent="onSubmit"
                   novalidate
                 >
                   <h1>Login</h1>
@@ -24,7 +24,7 @@ import { useAuthStore } from '@/stores'
                     <CFormInput
                       v-model="username"
                       placeholder="Email"
-                      autocomplete="username"
+                      autocomplete="email"
                       required
                     />
                     <CFormFeedback invalid>
@@ -39,7 +39,7 @@ import { useAuthStore } from '@/stores'
                       v-model="password"
                       type="password"
                       placeholder="Senha"
-                      autocomplete="current-password"
+                      autocomplete="senha"
                       required
                     />
                     <CFormFeedback invalid>
@@ -48,7 +48,18 @@ import { useAuthStore } from '@/stores'
                   </CInputGroup>
                   <CRow>
                     <CCol :xs="6">
-                      <CButton color="primary" class="px-4" type="submit">
+                      <CButton
+                        color="primary"
+                        class="px-4"
+                        type="submit"
+                        :disabled="this.isLoading"
+                      >
+                        <CSpinner
+                          component="span"
+                          size="sm"
+                          aria-hidden="true"
+                          v-show="this.isLoading"
+                        />
                         Entrar
                       </CButton>
                     </CCol>
@@ -92,12 +103,11 @@ export default {
       password: null,
       showErrors: null,
       validatedCustom01: null,
-      validatedDefault01: null,
-      validatedTooltip01: null,
+      isLoading: false,
     }
   },
   methods: {
-    onSubmit(event) {
+    async onSubmit(event) {
       const form = event.currentTarget
 
       if (form.checkValidity() === false) {
@@ -105,10 +115,11 @@ export default {
         event.stopPropagation()
       } else {
         const authStore = useAuthStore()
-
-        return authStore.login(this.username, this.password).catch((error) => {
+        this.isLoading = true
+        await authStore.login(this.username, this.password).catch((error) => {
           this.showErrors = error
         })
+        this.isLoading = false
       }
 
       this.validatedCustom01 = true

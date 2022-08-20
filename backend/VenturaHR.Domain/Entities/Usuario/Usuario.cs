@@ -8,12 +8,15 @@ namespace VenturaHR.Domain.Entities.Usuario
         public int Id { get; set; }
 
         [MaxLength(100)]
+        [Required]
         public string Nome { get; set; }
 
         [MaxLength(30)]
+        [Required]
         public string Email { get; set; }
 
         [MaxLength(100)]
+        [Required]
         public string Senha { get; set; }
 
         [MaxLength(200)]
@@ -22,6 +25,7 @@ namespace VenturaHR.Domain.Entities.Usuario
         [MaxLength(20)]
         public string Telefone { get; set; }
 
+        [Required]
         public UsuarioTipo Tipo { get; set; }
 
     }

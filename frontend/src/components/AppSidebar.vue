@@ -17,11 +17,6 @@
         :icon="logoNegative"
         :height="35"
       />
-      <CIcon
-        custom-class-name="sidebar-brand-narrow"
-        :icon="sygnet"
-        :height="35"
-      />
     </CSidebarBrand>
     <AppSidebarNav />
   </CSidebar>
