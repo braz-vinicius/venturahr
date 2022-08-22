@@ -12,7 +12,12 @@ const authStore = useAuthStore()
       <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
         Conta
       </CDropdownHeader>
-      <a @click="authStore.logout()"
+      <CDropdownItem>
+        <RouterLink to="/profile" class="nav-item nav-link">
+          <CIcon icon="cil-user" /> Perfil
+        </RouterLink></CDropdownItem
+      >
+      <a @click="authStore.logout()" class="nav-item nav-link"
         ><CDropdownItem>
           <CIcon icon="cil-lock-locked" /> Sair
         </CDropdownItem></a

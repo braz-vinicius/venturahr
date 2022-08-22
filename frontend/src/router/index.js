@@ -14,11 +14,13 @@ const routes = [
       {
         path: '/dashboard',
         name: 'Dashboard',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () =>
           import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
+      },
+      {
+        path: '/profile',
+        name: 'Perfil',
+        component: () => import('@/views/Profile')
       },
     ],
   },
@@ -42,8 +44,8 @@ router.beforeEach(async (to) => {
   const auth = useAuthStore();
 
   if (authRequired && !auth.user) {
-      auth.returnUrl = to.fullPath;
-      return '/login';
+    auth.returnUrl = to.fullPath;
+    return '/login';
   }
 });
 

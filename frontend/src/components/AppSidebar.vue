@@ -12,11 +12,12 @@
     "
   >
     <CSidebarBrand>
-      <CIcon
-        custom-class-name="sidebar-brand-full"
-        :icon="logoNegative"
-        :height="35"
-      />
+      <a :href="urlBase">
+        <CIcon
+          custom-class-name="sidebar-brand-full"
+          :icon="logoNegative"
+          :height="35"
+      /></a>
     </CSidebarBrand>
     <AppSidebarNav />
   </CSidebar>
@@ -29,9 +30,15 @@ import { AppSidebarNav } from './AppSidebarNav'
 import { logoNegative } from '@/assets/brand/logo-negative'
 export default {
   name: 'AppSidebar',
+  data: () => {
+    return {
+      urlBase: window.location.origin,
+    }
+  },
   components: {
     AppSidebarNav,
   },
+
   setup() {
     const store = useStore()
     return {

@@ -14,11 +14,20 @@ public class RegisterRequest
     [Required]
     public string Senha { get; set; }
 
-    [Required]
-    public UsuarioTipo Tipo { get; set; }
-
     public string Endereco { get; set; }
 
     [MaxLength(20)]
     public string Telefone { get; set; }
+
+
+    [MaxLength(14)]
+    public string CPF { get; set; }
+
+    public string CNPJ { get; set; }
+
+    [MaxLength(200)]
+    public string RazaoSocial { get; set; }
+
+    [Required]
+    public UsuarioTipo Tipo { get; set; }
 }

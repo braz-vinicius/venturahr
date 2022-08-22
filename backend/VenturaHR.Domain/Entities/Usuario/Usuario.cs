@@ -25,6 +25,14 @@ namespace VenturaHR.Domain.Entities.Usuario
         [MaxLength(20)]
         public string Telefone { get; set; }
 
+        [MaxLength(14)]
+        public string CPF { get; set; }
+
+        public string CNPJ { get; set; }
+
+        [MaxLength(200)]
+        public string RazaoSocial { get; set; }
+
         [Required]
         public UsuarioTipo Tipo { get; set; }
 
