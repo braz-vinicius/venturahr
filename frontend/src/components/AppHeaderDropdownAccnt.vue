@@ -1,11 +1,20 @@
 <script setup>
 import { useAuthStore } from '@/stores'
 const authStore = useAuthStore()
+
+const styleVars = {
+  'box-shadow': '0px 0px 0px 0px',
+}
 </script>
 
 <template>
-  <CDropdown variant="nav-item">
-    <CDropdownToggle placement="bottom-end" class="py-0" :caret="false">
+  <CDropdown style="styleVars">
+    <CDropdownToggle
+      placement="bottom-end"
+      class="py-0"
+      :style="styleVars"
+      :caret="false"
+    >
       <CIcon icon="cil-applications-settings" size="lg" />
     </CDropdownToggle>
     <CDropdownMenu class="pt-0">
