@@ -8,34 +8,61 @@ namespace VenturaHR.Domain.Services
 {
     public class VagaService : IVagaService
     {
-        private readonly IVagaRepository _repository;
+        private readonly IVagaRepository vagaRepository;
+        private readonly IVagaCriterioRepository criterioRepository;
 
-        public VagaService(IVagaRepository repository)
+        public VagaService(IVagaRepository vagaRepository, IVagaCriterioRepository criterioRepository)
         {
-            _repository = repository;
+            this.vagaRepository = vagaRepository;
+            this.criterioRepository = criterioRepository;
         }
 
         public void CreateVaga(Vaga vaga)
         {
             vaga.DataCriacao = DateTime.UtcNow;
 
-            _repository.Add(vaga);
+            vagaRepository.Add(vaga);
 
         }
 
         public List<Vaga> RetrieveAllVagas()
         {
-            return _repository.GetAll().OrderByDescending(x => x.DataCriacao).ToList();
+            return vagaRepository.GetAll("Empresa", "Criterios").OrderByDescending(x => x.DataCriacao).ToList();
         }
 
         public void DeleteVaga(int id)
         {
-            _repository.DeleteById(id);
+            vagaRepository.DeleteById(id);
         }
 
         public Vaga GetVaga(int id)
         {
-            return _repository.Get(x => x.Id == id);
+            return vagaRepository.Get(x => x.Id == id);
+        }
+
+        public void UpdateVaga(int id, Vaga value)
+        {
+            vagaRepository.Update(value);
+        }
+
+        public IEnumerable<VagaCriterio> GetVagaCriterios(int vagaId)
+        {
+            return criterioRepository.FindWhere(x => x.VagaId == vagaId).ToList();
+        }
+
+        public VagaCriterio GetVagaCriterio(int vagaId, int id)
+        {
+            return criterioRepository.Get(x => x.Id == id);
+        }
+
+        public void PostVagaCriterio(VagaCriterio value)
+        {
+            criterioRepository.CreateOrUpdate(value);
+        }
+
+        public void DeleteVagaCriterio(int id)
+        {
+            criterioRepository.DeleteById(id);
         }
     }
 }

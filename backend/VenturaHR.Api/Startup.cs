@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using VenturaHR.Api.Converters;
 using VenturaHR.Application.Helpers;
 using VenturaHR.Application.Services;
 using VenturaHR.Domain.Repositories;
@@ -30,7 +31,12 @@ namespace VenturaHR.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddControllers();
+
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VenturaHR.Api", Version = "v1" });
@@ -51,10 +57,13 @@ namespace VenturaHR.Api
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddTransient<IRespostaService, RespostaService>();
             services.AddTransient<IVagaService, VagaService>();
+            services.AddTransient<IStatsService, StatsService>();
 
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             services.AddTransient<IRespostaRepository, RespostaRepository>();
+            services.AddTransient<IRespostaCriterioRepository, RespostaCriterioRepository>();
             services.AddTransient<IVagaRepository, VagaRepository>();
+            services.AddTransient<IVagaCriterioRepository, VagaCriterioRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

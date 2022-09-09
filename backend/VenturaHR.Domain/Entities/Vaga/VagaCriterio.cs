@@ -14,7 +14,7 @@ namespace VenturaHR.Domain.Entities.Vaga
 
         public int Peso { get; set; }
 
-        public virtual Vaga Vaga { get; set; }
+       // public virtual Vaga Vaga { get; set; }
 
         public int VagaId { get; set; }
     }

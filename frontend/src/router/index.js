@@ -22,6 +22,11 @@ const routes = [
         name: 'Perfil',
         component: () => import('@/views/Profile')
       },
+      {
+        path: '/vaga',
+        name: 'Vaga',
+        component: () => import('@/views/Vaga')
+      },      
     ],
   },
   { path: '/login', component: () => import('@/views/Login') },

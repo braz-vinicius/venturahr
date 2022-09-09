@@ -53,7 +53,7 @@ namespace VenturaHR.Domain.Interfaces
         /// Get all elements of type {T} in repository
         /// </summary>
         /// <returns>List of selected elements</returns>
-        IEnumerable<TEntity> GetAll();
+        IEnumerable<TEntity> GetAll(params string[] includeEntities);
 
         /// <summary>
         /// Determines whether any element of a sequence satisfies a condition.

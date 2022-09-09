@@ -9,6 +9,6 @@ namespace VenturaHR.Domain.Entities.Usuario
 
         public string RazaoSocial { get; set; }
 
-        public virtual ICollection<Vaga.Vaga> Vagas { get; set; }
+        //public virtual ICollection<Vaga.Vaga> Vagas { get; set; }
     }
 }

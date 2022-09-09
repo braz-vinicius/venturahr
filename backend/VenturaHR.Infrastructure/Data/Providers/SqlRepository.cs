@@ -76,9 +76,9 @@ namespace VenturaHR.Infrastructure.Data.Providers
         }
 
 
-        public IEnumerable<TEntity> GetAll()
+        public IEnumerable<TEntity> GetAll(params string[] includeEntities)
         {
-            return DbSet.AsEnumerable();
+            return DbSet.IncludeMultiple(includeEntities).AsEnumerable();
         }
 
         public IEnumerable<TEntity> FindWhere(Expression<Func<TEntity, bool>> filter, params string[] includeEntities)
