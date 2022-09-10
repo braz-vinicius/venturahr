@@ -7,6 +7,7 @@ export const useJobStore = defineStore({
   id: 'jobs',
   state: () => ({
     jobs: {},
+    job: {},
   }),
   actions: {
     async getAll() {
@@ -15,6 +16,9 @@ export const useJobStore = defineStore({
         .get(baseUrl)
         .then((jobs) => (this.jobs = jobs))
         .catch((error) => (this.jobs = { error }))
+    },
+    async postVaga(vaga) {
+      return await fetchWrapper.post(baseUrl, vaga)
     },
   },
 })

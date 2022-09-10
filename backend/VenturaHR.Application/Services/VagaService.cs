@@ -20,7 +20,7 @@ namespace VenturaHR.Domain.Services
         public void CreateVaga(Vaga vaga)
         {
             vaga.DataCriacao = DateTime.UtcNow;
-
+            vaga.DataExpiracao = DateTime.UtcNow.AddDays(30);
             vagaRepository.Add(vaga);
 
         }

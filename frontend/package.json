@@ -14,22 +14,22 @@
   },
   "dependencies": {
     "@coreui/chartjs": "^3.0.0",
-    "@coreui/coreui-pro": "^4.0.4",
+    "@coreui/coreui-pro": "^4.3.4",
     "@coreui/icons": "^2.1.0",
     "@coreui/icons-vue": "2.0.0",
     "@coreui/utils": "^1.3.1",
-    "@coreui/vue-chartjs": "2.0.0",
-    "@coreui/vue-pro": "^4.0.1",
-    "core-js": "^3.19.0",
-    "pinia": "^2.0.18",
-    "vee-validate": "^4.6.5",
-    "vue": "^3.2.23",
-    "vue-router": "^4.0.12",
+    "@coreui/vue-chartjs": "2.0.1",
+    "@coreui/vue-pro": "^4.3.1",
+    "core-js": "^3.25.1",
+    "pinia": "^2.0.22",
+    "vee-validate": "^4.6.7",
+    "vue": "^3.2.39",
+    "vue-router": "^4.1.5",
     "vuex": "^4.0.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
+    "@babel/core": "^7.19.0",
     "@babel/eslint-parser": "^7.12.16",
     "@vue/cli-plugin-babel": "~5.0.0-rc.1",
     "@vue/cli-plugin-e2e-cypress": "~5.0.0-rc.1",
@@ -48,7 +48,7 @@
     "eslint-plugin-vue": "^8.0.3",
     "jest": "^27.0.5",
     "prettier": "^2.4.1",
-    "sass": "^1.32.7",
+    "sass": "^1.54.9",
     "sass-loader": "^12.0.0"
   }
 }

@@ -1,16 +1,19 @@
 <script setup>
+/* eslint-disable */
 import { storeToRefs } from 'pinia'
-import { useAuthStore, useUsersStore } from '@/stores'
-import { onMounted, computed } from 'vue'
+import { useAuthStore, useUsersStore, useJobStore } from '@/stores'
+import { onMounted } from 'vue'
+import router from '@/router'
 
+const jobStore = useJobStore()
 const authStore = useAuthStore()
 const { user: authUser } = storeToRefs(authStore)
 
 const userStore = useUsersStore()
 
-const fullUser = computed(() => {
-  return userStore.user
-})
+// const fullUser = computed(() => {
+//   return userStore.user
+// })
 
 onMounted(() => {
   userStore.getUser(authUser.value.id)
@@ -26,25 +29,25 @@ onMounted(() => {
         <CCardBody>
           <CForm
             class="row g-3"
-            @submit.prevent="editUser"
+            @submit.prevent="postVaga"
             :validated="validatedForm"
             novalidate
           >
             <CCol :md="6">
               <CFormLabel for="inputEmail4">Cargo</CFormLabel>
-              <CFormInput v-model="fullUser.nome" required />
+              <CFormInput v-model="vaga.cargo" required />
             </CCol>
             <CCol :md="6">
               <CFormLabel for="inputPassword4">Empresa</CFormLabel>
-              <CFormInput v-model="fullUser.cpf" disabled />
+              <CFormInput :value="userStore.user.nome" disabled />
             </CCol>
             <CCol :md="6">
               <CFormLabel for="inputEmail4">Cidade</CFormLabel>
-              <CFormInput v-model="fullUser.email" required />
+              <CFormInput v-model="vaga.cidade" required />
             </CCol>
             <CCol :md="6">
               <CFormLabel for="inputPassword4">Forma de Contratação</CFormLabel>
-              <CFormInput v-model="fullUser.senha" required />
+              <CFormInput v-model="vaga.formaContratacao" required />
             </CCol>
             <CCol :xs="12">
               <CCard class="mb-4">
@@ -55,7 +58,7 @@ onMounted(() => {
                   <CRow class="mb-2">
                     <CCol :md="3">
                       <CFormLabel for="inputEmail4">Nome</CFormLabel>
-                      <CFormInput v-model="criterio.nome" required />
+                      <CFormInput v-model="criterio.nome" />
                     </CCol>
                     <CCol :md="6">
                       <CFormLabel for="inputPassword4">Descrição</CFormLabel>
@@ -92,6 +95,7 @@ onMounted(() => {
                         class="mt-4"
                         type="button"
                         color="primary"
+                        variant="outline"
                         :disabled="isLoading"
                         @click="addCriterio"
                       >
@@ -132,14 +136,20 @@ onMounted(() => {
                       <template #show_details="{ item, index }">
                         <td class="py-2">
                           <CButton
+                            type="button"
                             color="primary"
                             variant="outline"
-                            square
                             size="sm"
-                            @click="toggleDetails(item, index)"
+                            :disabled="isLoading"
+                            @click="delCriterio(item, index)"
                           >
-                            {{ Boolean(item._toggled) ? 'Hide' : 'Show' }}
-                          </CButton>
+                            <CSpinner
+                              component="span"
+                              size="sm"
+                              aria-hidden="true"
+                              v-show="isLoading" />
+                            <CIcon icon="cil-trash"
+                          /></CButton>
                         </td>
                       </template>
                       <template #details="{ item }">
@@ -173,14 +183,14 @@ onMounted(() => {
                   aria-hidden="true"
                   v-show="isLoading"
                 />
-                Atualizar Perfil</CButton
+                Publicar Vaga</CButton
               >
             </CCol>
           </CForm>
           <CRow class="mt-3">
             <CCol>
               <CAlert color="success" v-if="showSuccess"
-                >As atualizações de perfil foram salvas com sucesso.</CAlert
+                >A vaga foi publicada com sucesso. Redirecionando para o painel de vagas...</CAlert
               >
               <CAlert v-if="showErrors" color="danger">{{ showErrors }}</CAlert>
             </CCol>
@@ -192,6 +202,7 @@ onMounted(() => {
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   name: 'Vaga',
   data: () => {
@@ -200,20 +211,18 @@ export default {
       showErrors: '',
       showSuccess: false,
       validatedForm: null,
+      vaga: {
+        cargo: null,
+        empresaId: null,
+        formaContratacao: null,
+        cidade: null,
+        criterios: [],
+      },
       criterio: {
         nome: '',
         descricao: '',
         perfil: '1',
         peso: '1',
-      },
-      form: {
-        nome: '',
-        email: '',
-        senha: '',
-        cpf: '',
-        cnpj: '',
-        telefone: '',
-        endereco: '',
       },
       columns: [
         {
@@ -251,42 +260,51 @@ export default {
         },
       ],
       details: [],
-      items: [
-        {
-          nome: 'Desenvolvimento C#',
-          descricao: 'Conhecimentos de desenvolvimento em C#',
-          perfil: '4',
-          peso: '5',
-        },
-      ],
+      items: [],
     }
   },
   methods: {
-    async editUser(event) {
+    async postVaga(event) {
+      this.showErrors = ''  
       const form = event.currentTarget
 
       if (form.checkValidity() === true) {
         this.isLoading = true
-        await this.userStore.updateUser(this.fullUser).catch((error) => {
+        this.vaga.empresaId = this.userStore.user.id
+        this.vaga.criterios = this.items
+        console.log(this.vaga)
+        await this.jobStore.postVaga(this.vaga).catch((error) => {
           this.showErrors = error
         })
 
-        if (this.showErrors == '') this.showSuccess = true
+        if (this.showErrors == '') {
+          this.showSuccess = true
+          setTimeout(() => {
+            router.push('/')
+          }, 2000)
+        }
       }
 
       this.isLoading = false
       this.validatedForm = true
     },
-    addCriterio(event) {
+    addCriterio() {
       this.items.push({
         nome: this.criterio.nome,
         descricao: this.criterio.descricao,
         perfil: this.criterio.perfil,
         peso: this.criterio.peso,
       })
-      this.items = []
-      console.log(event)
-      console.log(this.items)
+      this.items = [...this.items]
+
+      this.criterio.nome = null
+      this.criterio.descricao = null
+      this.criterio.perfil = 1
+      this.criterio.peso = 1
+    },
+    delCriterio(item, index) {
+      this.items.splice(item._id, 1)
+      this.items = [...this.items]
     },
     getBadge(status) {
       switch (status) {
