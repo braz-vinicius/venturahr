@@ -6,8 +6,6 @@ namespace VenturaHR.Domain.Entities.Resposta
     {
         public int Id { get; set; }
 
-        public virtual Resposta Resposta { get; set; }
-
         public int RespostaId { get; set; }
     }
 }

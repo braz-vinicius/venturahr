@@ -1,6 +1,6 @@
 namespace VenturaHR.Tests
 {
-    public class UnitTest1
+    public class StatsServiceTests
     {
         [Fact]
         public void Test1()
