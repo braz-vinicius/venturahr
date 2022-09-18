@@ -10,4 +10,7 @@ public class AuthenticateRequest
 
     [Required]
     public string Senha { get; set; }
+
+    [Required]
+    public int  Tipo { get; set; }
 }

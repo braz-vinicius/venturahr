@@ -188,7 +188,10 @@ export default {
       this.validatedForm = true
     },
     changeUserTipo(ev) {
-      this.form.tipo = ev.target.value
+      if (ev.target.value == 3) this.form.cnpj = null
+      else this.form.cpf = null
+
+      this.form.tipo = parseInt(ev.target.value)
     },
   },
 }

@@ -38,14 +38,9 @@ onBeforeMount(async () => {
     itemsPerPageSelect
     :itemsPerPage="5"
     columnSorter
-    :sorterValue="{ column: 'status', state: 'asc' }"
+    :sorterValue="{ column: 'dataExpiracao', state: 'asc' }"
     pagination
   >
-    <template #status="{ item }">
-      <td>
-        <CBadge :color="getBadge(item.status)">{{ item.status }}</CBadge>
-      </td>
-    </template>
     <template #options="{ item, index }">
       <div>
         <td class="p-1">
@@ -59,7 +54,7 @@ onBeforeMount(async () => {
             {{ Boolean(item._toggled) ? 'Hide' : 'Critérios' }}
           </CButton>
         </td>
-        <td class="p-1" v-if="authUser?.tipo == 4">
+        <td class="p-1" v-if="authUser?.tipo == 4 && authUser?.id == item.empresaId">
           <CButton
             color="primary"
             variant="outline"
@@ -71,19 +66,17 @@ onBeforeMount(async () => {
           </CButton>
         </td>
         <td class="p-1" v-if="authUser?.tipo == 3">
-          <RouterLink :to="{ name: 'Resposta',params: {id: item.id}}" class="nav-item nav-link">
-            <CButton
-              color="primary"
-              variant="outline"
-              square
-              size="sm"
-            >
+          <RouterLink
+            :to="{ name: 'Resposta', params: { id: item.id } }"
+            class="nav-item nav-link"
+          >
+            <CButton color="primary" variant="outline" square size="sm">
               {{ Boolean(item._toggled) ? 'Hide' : 'Responder' }}
             </CButton>
           </RouterLink>
         </td>
       </div>
-    </template>   
+    </template>
     <template #details="{ item }">
       <CCollapse :visible="this.details.includes(item._id)">
         <CCardBody>
@@ -114,7 +107,9 @@ onBeforeMount(async () => {
               <CTableRow>
                 <CTableHeaderCell scope="col">#</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Nome</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Data de Resposta</CTableHeaderCell>
+                <CTableHeaderCell scope="col"
+                  >Data de Resposta</CTableHeaderCell
+                >
                 <CTableHeaderCell scope="col">Perfil</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
@@ -128,7 +123,7 @@ onBeforeMount(async () => {
             </CTableBody>
           </CTable>
         </CCardBody>
-      </CCollapse>      
+      </CCollapse>
     </template>
   </CSmartTable>
 </template>
@@ -144,8 +139,8 @@ export default {
           _style: { width: '40%' },
         },
         {
-          key: 'dataCriacao',
-          label: 'Data de Criação',
+          key: 'empresaNome',
+          label: 'Empresa',
           _style: { width: '20%' },
         },
         {
@@ -196,16 +191,18 @@ export default {
       this.details = this.details.filter((_item) => _item !== item._id)
       this.respostas.push(item._id)
 
-      console.log(this.respostas)
-    },    
+     // console.log(this.respostas)
+    },
   },
   async mounted() {
-    // console.log(this.items)
-    // this.items = JSON.parse(JSON.stringify(this.fullUser));
     const jobStore = useJobStore()
     await jobStore.getAll()
+
+    jobStore.jobs.forEach((element) => {
+      element.empresaNome = element.empresa.nome
+    })
+
     this.items = toRaw(jobStore.jobs)
-    console.log(toRaw(jobStore.jobs))
   },
 }
 </script>

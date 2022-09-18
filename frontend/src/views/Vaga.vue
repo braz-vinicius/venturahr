@@ -121,7 +121,6 @@ onMounted(() => {
                       header
                       v-model:items="items"
                       :columns="columns"
-                      itemsPerPageSelect
                       :itemsPerPage="5"
                       :sorterValue="{ column: 'status', state: 'asc' }"
                       pagination

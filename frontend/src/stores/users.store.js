@@ -19,13 +19,7 @@ export const useUsersStore = defineStore({
         .catch((error) => (this.users = { error }))
     },
     async register(form) {
-      return fetchWrapper.post(`${baseUrl}/register`, {
-        nome: form.nome,
-        email: form.email,
-        senha: form.senha,
-        cpf: form.cpf,
-        cnpj: form.cnpj,
-      })
+      return fetchWrapper.post(`${baseUrl}/register`, form)
     },
     async getUser(id) {
       this.user = { loading: true }
@@ -35,16 +29,7 @@ export const useUsersStore = defineStore({
         .catch((error) => (this.user = { error }))
     },
     async updateUser(form) {
-      return fetchWrapper.put(`${baseUrl}/${form.id}`, {
-        nome: form.nome,
-        email: form.email,
-        senha: form.senha,
-        cpf: form.cpf,
-        cnpj: form.cnpj,
-        razaoSocial: form.razaoSocial,
-        telefone: form.telefone,
-        endereco: form.endereco,
-      })
+      return fetchWrapper.put(`${baseUrl}/${form.id}`, form)
     },
   },
 })

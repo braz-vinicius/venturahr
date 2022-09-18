@@ -1,10 +1,16 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-
-import { useAuthStore } from '@/stores'
+import { useJobStore, useAuthStore } from '@/stores'
+import { toRaw, onBeforeMount } from 'vue'
 
 const authStore = useAuthStore()
 const { user: authUser } = storeToRefs(authStore)
+
+const jobStore = useJobStore()
+
+onBeforeMount(async () => {
+  await jobStore.getAll()
+})
 </script>
 <template>
   <div>
@@ -17,7 +23,7 @@ const { user: authUser } = storeToRefs(authStore)
       />
       <div>Bem-vindo! {{ authUser?.email }}</div>
     </CAlert>
-    <WidgetsStatsA />
+    <WidgetsStatsA :tipo="authUser?.tipo" :id="authUser.id" :jobs="items" />
     <CRow>
       <CCol :xs="12">
         <CCard class="mb-4">
@@ -25,7 +31,7 @@ const { user: authUser } = storeToRefs(authStore)
             <strong>Painel de Vagas</strong>
           </CCardHeader>
           <CCardBody>
-            <CRow v-if="authUser?.tipo == 3">
+            <CRow v-if="authUser?.tipo == 4">
               <CCol :xs="12">
                 <RouterLink to="/vaga" class="nav-item nav-link">
                   <CButton
@@ -53,9 +59,26 @@ import WidgetsStatsA from './widgets/WidgetsStatsTypeA.vue'
 import JobTable from '@/components/JobTable.vue'
 export default {
   name: 'Dashboard',
+  data: () => {
+    return {
+      teste: 'dsd',
+      items: [],
+    }
+  },
   components: {
     WidgetsStatsA,
     JobTable,
+  },
+  async created() {
+    const jobStore = useJobStore()
+    await jobStore.getAll()
+
+    jobStore.jobs.forEach((element) => {
+      element.empresaNome = element.empresa.nome
+    })
+
+    this.items = toRaw(jobStore.jobs)
+    console.log(this.items)
   },
 }
 </script>

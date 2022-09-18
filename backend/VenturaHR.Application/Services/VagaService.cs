@@ -28,14 +28,22 @@ namespace VenturaHR.Domain.Services
 
         private decimal CalculateVagaPerfil(Vaga vaga)
         {
-            decimal notaPerfil = Decimal.Divide( vaga.Criterios.Sum(x => x.Perfil * x.Peso) , vaga.Criterios.Sum(x => x.Peso));
+            decimal notaPerfil = Decimal.Divide(vaga.Criterios.Sum(x => x.Perfil * x.Peso), vaga.Criterios.Sum(x => x.Peso));
 
             return notaPerfil;
         }
 
         public List<Vaga> RetrieveAllVagas()
         {
-            return vagaRepository.GetAll("Empresa", "Criterios", "Respostas", "Respostas.Candidato").OrderByDescending(x => x.DataCriacao).ToList();
+            var vaga = vagaRepository.GetAll("Empresa", "Criterios", "Respostas", "Respostas.Candidato")
+                .OrderByDescending(x =>
+                {
+                    x.Respostas = x.Respostas.OrderByDescending(y => y.Perfil).ToList();
+                    return x.DataCriacao;
+                });
+
+            //vaga.SelectMany(x => x.Respostas).OrderByDescending(x => x.Perfil);
+            return vaga.ToList();
         }
 
         public void DeleteVaga(int id)
