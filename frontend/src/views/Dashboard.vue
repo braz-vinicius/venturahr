@@ -25,7 +25,7 @@ const { user: authUser } = storeToRefs(authStore)
             <strong>Painel de Vagas</strong>
           </CCardHeader>
           <CCardBody>
-            <CRow>
+            <CRow v-if="authUser?.tipo == 3">
               <CCol :xs="12">
                 <RouterLink to="/vaga" class="nav-item nav-link">
                   <CButton

@@ -53,6 +53,19 @@ namespace VenturaHR.Infrastructure.Data
                  .HasValue<Empresa>(UsuarioTipo.Empresa);
 
 
+            modelBuilder.Entity<RespostaCriterio>()
+                .HasOne(x=>x.VagaCriterio)
+                .WithMany(x=>x.RespostaCriterios)
+                .HasForeignKey(x=>x.VagaCriterioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Resposta>()
+                .HasOne(x => x.Vaga)
+                .WithMany(x => x.Respostas)
+                .HasForeignKey(x => x.VagaId)
+                .OnDelete(DeleteBehavior.Restrict);
+                
+
         }
     }
 }

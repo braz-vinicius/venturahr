@@ -17,6 +17,12 @@ namespace VenturaHR.Domain.Entities.Resposta
         
         public decimal Indice { get; set; }
 
+        public decimal Perfil { get; set; }
+
+        public int VagaId { get; set; }
+
+        public virtual Vaga.Vaga Vaga { get; set; }
+
         public virtual ICollection<RespostaCriterio> Criterios { get; set; }
     }
 }

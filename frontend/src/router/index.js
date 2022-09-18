@@ -26,7 +26,13 @@ const routes = [
         path: '/vaga',
         name: 'Vaga',
         component: () => import('@/views/Vaga')
-      },      
+      },
+      {
+        path: '/resposta/:id',
+        name: 'Resposta',
+        props: true,
+        component: () => import('@/views/Resposta')
+      },            
     ],
   },
   { path: '/login', component: () => import('@/views/Login') },

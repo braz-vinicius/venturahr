@@ -14,6 +14,8 @@ namespace VenturaHR.Domain.Entities.Vaga
 
         public int EmpresaId { get; set; }
 
+        public decimal Perfil { get; set; }
+
         [MaxLength(45)]
         public string Cargo { get; set; }
         

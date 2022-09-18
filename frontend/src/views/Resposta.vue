@@ -24,30 +24,30 @@ onMounted(() => {
     <CCol :xs="12">
       <CCard class="mb-4">
         <CCardHeader>
-          <strong>Vaga</strong>
+          <strong>Responder Vaga</strong>
         </CCardHeader>
         <CCardBody>
           <CForm
             class="row g-3"
-            @submit.prevent="postVaga"
+            @submit.prevent="postResposta"
             :validated="validatedForm"
             novalidate
           >
             <CCol :md="6">
               <CFormLabel for="inputEmail4">Cargo</CFormLabel>
-              <CFormInput v-model="vaga.cargo" required />
+              <CFormInput v-model="vaga.cargo" required disabled />
             </CCol>
             <CCol :md="6">
               <CFormLabel for="inputPassword4">Empresa</CFormLabel>
-              <CFormInput :value="userStore.user.nome" disabled />
+              <CFormInput :value="vaga.empresa.nome" disabled />
             </CCol>
             <CCol :md="6">
               <CFormLabel for="inputEmail4">Cidade</CFormLabel>
-              <CFormInput v-model="vaga.cidade" required />
+              <CFormInput v-model="vaga.cidade" required disabled />
             </CCol>
             <CCol :md="6">
               <CFormLabel for="inputPassword4">Forma de Contratação</CFormLabel>
-              <CFormInput v-model="vaga.formaContratacao" required />
+              <CFormInput v-model="vaga.formaContratacao" required disabled />
             </CCol>
             <CCol :xs="12">
               <CCard class="mb-4">
@@ -55,59 +55,6 @@ onMounted(() => {
                   <strong>Critérios</strong>
                 </CCardHeader>
                 <CCardBody>
-                  <CRow class="mb-2">
-                    <CCol :md="3">
-                      <CFormLabel for="inputEmail4">Nome</CFormLabel>
-                      <CFormInput v-model="criterio.nome" />
-                    </CCol>
-                    <CCol :md="6">
-                      <CFormLabel for="inputPassword4">Descrição</CFormLabel>
-                      <CFormInput v-model="criterio.descricao" />
-                    </CCol>
-                    <CCol :md="1">
-                      <CFormLabel for="inputEmail4">Perfil</CFormLabel>
-                      <CFormSelect
-                        v-model="criterio.perfil"
-                        aria-label="Perfil do critério"
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </CFormSelect>
-                    </CCol>
-                    <CCol :md="1">
-                      <CFormLabel for="inputPassword4">Peso</CFormLabel>
-                      <CFormSelect
-                        v-model="criterio.peso"
-                        aria-label="Peso do critério"
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                      </CFormSelect>
-                    </CCol>
-                    <CCol :md="1" class="mt-2">
-                      <CButton
-                        class="mt-4"
-                        type="button"
-                        color="primary"
-                        variant="outline"
-                        :disabled="isLoading"
-                        @click="addCriterio"
-                      >
-                        <CSpinner
-                          component="span"
-                          size="sm"
-                          aria-hidden="true"
-                          v-show="isLoading" />
-                        <CIcon icon="cil-plus"
-                      /></CButton>
-                    </CCol>
-                  </CRow>
                   <CRow>
                     <CSmartTable
                       :tableProps="{
@@ -119,13 +66,26 @@ onMounted(() => {
                       }"
                       :activePage="1"
                       header
-                      v-model:items="items"
-                      :columns="columns"
-                      itemsPerPageSelect
-                      :itemsPerPage="5"
+                      v-model:items="vaga.criterios"
+                      :columns="columns"                      
+                      :itemsPerPage="10"
                       :sorterValue="{ column: 'status', state: 'asc' }"
                       pagination
                     >
+                      <template #perfil="{ item, index }">
+                        <CFormSelect
+                          required
+                          v-model="criterios[item.id]"
+                          aria-label="Peso do critério"
+                        >
+                          <option selected="" disabled="" value=""></option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </CFormSelect>
+                      </template>
                       <template #show_details="{ item, index }">
                         <td class="py-2">
                           <CButton
@@ -158,14 +118,15 @@ onMounted(() => {
                   aria-hidden="true"
                   v-show="isLoading"
                 />
-                Publicar Vaga</CButton
+                Responder Vaga</CButton
               >
             </CCol>
           </CForm>
           <CRow class="mt-3">
             <CCol>
               <CAlert color="success" v-if="showSuccess"
-                >A vaga foi publicada com sucesso. Redirecionando para o painel de vagas...</CAlert
+                >A vaga foi respondida com sucesso. Redirecionando para o painel
+                de vagas...</CAlert
               >
               <CAlert v-if="showErrors" color="danger">{{ showErrors }}</CAlert>
             </CCol>
@@ -179,15 +140,23 @@ onMounted(() => {
 <script>
 /* eslint-disable */
 export default {
-  name: 'Vaga',
+  name: 'Resposta',
+  async created() {
+    var vaga = await this.jobStore.getVaga(this.$route.params.id)
+    this.vaga = vaga
+    console.log(this.$route.params.id)
+    console.log(this.vaga)
+  },
   data: () => {
     return {
       isLoading: false,
       showErrors: '',
       showSuccess: false,
       validatedForm: null,
+      criterios: [],
       vaga: {
         cargo: null,
+        empresa: [],
         empresaId: null,
         formaContratacao: null,
         cidade: null,
@@ -204,34 +173,20 @@ export default {
           key: 'nome',
           filter: false,
           sorter: false,
-          _style: { width: '40%' },
+          _style: { width: '30%' },
           _props: { class: 'fw-semibold' },
         },
         {
           key: 'descricao',
           filter: false,
           sorter: false,
-          _style: { width: '20%' },
+          _style: { width: '60%' },
         },
         {
           key: 'perfil',
           filter: false,
           sorter: false,
-          _style: { width: '20%' },
-        },
-        {
-          key: 'peso',
-          filter: false,
-          sorter: false,
-          _style: { width: '20%' },
-        },
-        {
-          key: 'show_details',
-          label: '',
-          _style: { width: '1%' },
-          filter: false,
-          sorter: false,
-          _props: { class: 'fw-semibold' },
+          _style: { width: '10%' },
         },
       ],
       details: [],
@@ -239,8 +194,46 @@ export default {
     }
   },
   methods: {
+    async postResposta(event) {
+      var criterias = []
+
+      this.criterios.forEach((element, index) => {
+        criterias.push({ VagaCriterioId: index, perfil: element })
+      })
+
+      var resposta = {
+        candidatoId: this.userStore.user.id,
+        vagaId: this.$route.params.id,
+        empresaId: this.vaga.empresaId,
+        criterios: criterias,
+      }
+
+      console.log(resposta)
+      console.log(this.criterios)
+
+      this.showErrors = ''
+      const form = event.currentTarget
+
+      if (form.checkValidity() === true) {
+        this.isLoading = true
+
+        await this.jobStore.postResposta(resposta).catch((error) => {
+          this.showErrors = error
+        })
+
+        if (this.showErrors == '') {
+          this.showSuccess = true
+          setTimeout(() => {
+            router.push('/')
+          }, 2000)
+        }
+      }
+
+      this.isLoading = false
+      this.validatedForm = true
+    },
     async postVaga(event) {
-      this.showErrors = ''  
+      this.showErrors = ''
       const form = event.currentTarget
 
       if (form.checkValidity() === true) {

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VenturaHR.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using VenturaHR.Infrastructure.Data;
 namespace VenturaHR.Infrastructure.Migrations
 {
     [DbContext(typeof(VenturaDbContext))]
-    partial class VenturaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220917220416_AddVagaCriterioNome")]
+    partial class AddVagaCriterioNome
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,8 +41,8 @@ namespace VenturaHR.Infrastructure.Migrations
                     b.Property<decimal>("Indice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Perfil")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Perfil")
+                        .HasColumnType("int");
 
                     b.Property<int>("VagaId")
                         .HasColumnType("int");
@@ -161,8 +163,8 @@ namespace VenturaHR.Infrastructure.Migrations
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 
-                    b.Property<decimal>("Perfil")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Perfil")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -184,7 +186,6 @@ namespace VenturaHR.Infrastructure.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("nvarchar(45)");
 

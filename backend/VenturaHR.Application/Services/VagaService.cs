@@ -21,13 +21,21 @@ namespace VenturaHR.Domain.Services
         {
             vaga.DataCriacao = DateTime.UtcNow;
             vaga.DataExpiracao = DateTime.UtcNow.AddDays(30);
+            vaga.Perfil = CalculateVagaPerfil(vaga);
             vagaRepository.Add(vaga);
 
         }
 
+        private decimal CalculateVagaPerfil(Vaga vaga)
+        {
+            decimal notaPerfil = Decimal.Divide( vaga.Criterios.Sum(x => x.Perfil * x.Peso) , vaga.Criterios.Sum(x => x.Peso));
+
+            return notaPerfil;
+        }
+
         public List<Vaga> RetrieveAllVagas()
         {
-            return vagaRepository.GetAll("Empresa", "Criterios").OrderByDescending(x => x.DataCriacao).ToList();
+            return vagaRepository.GetAll("Empresa", "Criterios", "Respostas", "Respostas.Candidato").OrderByDescending(x => x.DataCriacao).ToList();
         }
 
         public void DeleteVaga(int id)
@@ -37,7 +45,7 @@ namespace VenturaHR.Domain.Services
 
         public Vaga GetVaga(int id)
         {
-            return vagaRepository.Get(x => x.Id == id);
+            return vagaRepository.Get(x => x.Id == id, "Empresa", "Criterios");
         }
 
         public void UpdateVaga(int id, Vaga value)

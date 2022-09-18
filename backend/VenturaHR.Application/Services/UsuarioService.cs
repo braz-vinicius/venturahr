@@ -12,77 +12,77 @@ using WebApi.Authorization;
 
 public class UsuarioService : IUsuarioService
 {
-    private IRepository<Usuario, int> _context;
-    private IJwtUtils _jwtUtils;
-    private readonly IMapper _mapper;
+    private IRepository<Usuario, int> userRepository;
+    private IJwtUtils jwtUtils;
+    private readonly IMapper mapper;
 
     public UsuarioService(
-        IUsuarioRepository context,
+        IUsuarioRepository userRepository,
         IJwtUtils jwtUtils,
         IMapper mapper)
     {
-        _context = context;
-        _jwtUtils = jwtUtils;
-        _mapper = mapper;
+        this.userRepository = userRepository;
+        this.jwtUtils = jwtUtils;
+        this.mapper = mapper;
     }
 
     public AuthenticateResponse Authenticate(AuthenticateRequest model)
     {
-        var user = _context.Get(x => x.Email == model.Email);
+        var user = userRepository.Get(x => x.Email == model.Email);
 
         // valida senha
         if (user == null || !BCrypt.Verify(model.Senha, user.Senha))
             throw new AppException("Email e/ou senha incorretos");
 
         // autenticação realizada com sucesso
-        var response = _mapper.Map<AuthenticateResponse>(user);
-        response.Token = _jwtUtils.GenerateToken(user);
+        var response = mapper.Map<AuthenticateResponse>(user);
+        response.Token = jwtUtils.GenerateToken(user);
         return response;
     }
 
     public IEnumerable<Usuario> GetAllUsuarios()
     {
-        return _context.GetAll();
+        return userRepository.GetAll();
     }
 
     public Usuario GetUsuarioById(int id)
     {
-        var user = _context.Get(x => x.Id == id);
+        var user = userRepository.Get(x => x.Id == id);
         if (user == null) throw new KeyNotFoundException("Usuário não encontrado");
         return user;
     }
 
     public void RegisterNewUsuario(RegisterRequest model)
     {
-        if (_context.HasAny(x => x.Email == model.Email))
+        if (userRepository.HasAny(x => x.Email == model.Email))
             throw new AppException("Email '" + model.Email + "' já está sendo utilizado");
 
-        var user = _mapper.Map<Usuario>(model);
+        var user = mapper.Map<Usuario>(model);
 
         user.Senha = BCrypt.HashPassword(model.Senha);
 
-        _context.Add(user);
+        userRepository.Add(user);
     }
 
     public void UpdateUsuario(int id, UpdateRequest model)
     {
         var user = GetUsuarioById(id);
 
-        if (model.Email != user.Email && _context.HasAny(x => x.Email == model.Email))
+        if (model.Email != user.Email && userRepository.HasAny(x => x.Email == model.Email))
             throw new AppException("Email '" + model.Email + "' já está sendo utilizado");
 
         if (!string.IsNullOrEmpty(model.Senha))
             user.Senha = BCrypt.HashPassword(model.Senha);
 
-        _mapper.Map(model, user);
-        _context.Update(user);
+        mapper.Map(model, user);
+        userRepository.Update(user);
     }
 
     public void DeleteUsuario(int id)
     {
         var user = GetUsuarioById(id);
 
-        _context.Delete(user);
+        userRepository.Delete(user);
     }
 
 }
