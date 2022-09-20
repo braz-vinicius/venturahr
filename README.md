@@ -67,7 +67,11 @@ Dessa forma, uma publicação pode ficar assim:
 
 Nesse exemplo, o perfil da oportunidade é calculado pela média ponderada:
 
+<div align="center">
+<strong>
 (4*5) +( 4*3) + (1*1) + (4*2) / (5 + 3 + 1 + 2) = 20 + 12 + 1 + 8 / 11 = 41 / 11 = 3,72
+</strong>
+</div>
 
 A tabela acima mostra como o contato da empresa que publica a oportunidade deve especificar uma vaga.
 Cada vaga terá uma data/hora limite para receber as informações dos interessados.
@@ -86,7 +90,11 @@ O candidato que desejar responder a essa oportunidade deve poder pesquisar por v
 
 O candidato que respondeu à oferta teve o seu perfil calculado da seguinte forma:
 
+<div align="center">
+<strong>
 (5*5) +( 3*3) + (1*1) + (5*2) / (5 + 3 + 1 + 2) = 25 + 9 + 1 + 10 / 11 = 45 / 11 = 4,09
+</strong>
+</div>
 
 ### Regras Gerais
 
