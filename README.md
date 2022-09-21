@@ -6,6 +6,8 @@
     - [Resposta para Vaga](#resposta-para-vaga)
     - [Regras Gerais](#regras-gerais)
 - [Casos de Uso](#casos-de-uso)
+  - [Publicar Vaga](#publicar-vaga)
+  - [Responder Vaga](#responder-vaga)
 - [Modelagem do sistema](#modelagem-do-sistema)
   - [Diagramas de Domínio](#diagramas-de-domínio)
   - [Diagramas de Classe](#diagramas-de-classe)
@@ -59,7 +61,7 @@ Por exemplo, uma vaga para Analista de Requisitos poderia ter 4 critérios: UML,
 Dessa forma, uma publicação pode ficar assim:
 
 |  Critério 	                    |   Descrição	|  PMD 	|  Peso 	|   	|
-|---	                            |---	|---	|---	|---	|
+|---	                            |---	        |---	|---	    |---	|
 | UML  	                            |O candidato deverá conhecer os principais diagramas da UML: casos de uso, classes e seqüência.   	|  4 	|   5	|   	|
 | Inglês  	                        |Conversação e leitura de documentos técnicos   	                                                |  4  	|   3	|   	|
 | Análise de Pontos de Função  	    |Desejável conhecimentos de dimensionamento de sistemas.       	                                    |  1 	|   1	|   	|
@@ -67,11 +69,11 @@ Dessa forma, uma publicação pode ficar assim:
 
 Nesse exemplo, o perfil da oportunidade é calculado pela média ponderada:
 
-<div align="center">
+<p align="center">
 <strong>
 (4*5) +( 4*3) + (1*1) + (4*2) / (5 + 3 + 1 + 2) = 20 + 12 + 1 + 8 / 11 = 41 / 11 = 3,72
 </strong>
-</div>
+</p>
 
 A tabela acima mostra como o contato da empresa que publica a oportunidade deve especificar uma vaga.
 Cada vaga terá uma data/hora limite para receber as informações dos interessados.
@@ -81,7 +83,7 @@ Cada vaga terá uma data/hora limite para receber as informações dos interessa
 O candidato que desejar responder a essa oportunidade deve poder pesquisar por vários critérios, mas a pesquisa pelo cargo desejado é mandatória. Ao selecionar uma vaga, uma página deverá ser carregada e o candidato deve responder através de valores 1 (nenhum/pouco), 2, 3, 4 e 5 (todo) qual é o seu conhecimento / experiência em cada critério, como por exemplo:
 
 |  Critério 	                    |   Descrição	|  Experiência 	|
-|---	                            |---	        |---	                        |
+|---	                            |---	        |---	        |
 | UML  	                            |O candidato deverá conhecer os principais diagramas da UML: casos de uso, classes e seqüência.   	|  5 	|
 | Inglês  	                        |Conversação e leitura de documentos técnicos   	                                                |  3  	|
 | Análise de Pontos de Função  	    |Desejável conhecimentos de dimensionamento de sistemas.       	                                    |  1 	|
@@ -90,11 +92,11 @@ O candidato que desejar responder a essa oportunidade deve poder pesquisar por v
 
 O candidato que respondeu à oferta teve o seu perfil calculado da seguinte forma:
 
-<div align="center">
+<p align="center">
 <strong>
 (5*5) +( 3*3) + (1*1) + (5*2) / (5 + 3 + 1 + 2) = 25 + 9 + 1 + 10 / 11 = 45 / 11 = 4,09
 </strong>
-</div>
+</p>
 
 ### Regras Gerais
 
@@ -107,6 +109,96 @@ O sistema precisa controlar cadastro e acesso de usuários e empresas e fazer a 
 O sistema precisa tornar disponível para o administrador relatórios básicos de acesso por usuário, empresa e número de ofertas. 
 
 # Casos de Uso
+
+## Publicar Vaga
+
+**Objetivo** : Permitir que a Empresa cadastre e publique vagas de emprego.
+
+**Atores** : Empresa.
+
+**Condição de entrada** : Usuário do tipo Empresa devidamente autenticado, seleciona o menu "Dashboard" e logo após clica no botão &quot;Publicar Vaga&quot;.
+
+**Condição de saída**: Uma vaga de emprego será publicada e poderá ser pesquisada e receber respostas de Candidatos.
+
+**Fluxo principal** :
+
+1. O sistema apresenta formulário de cadastro geral da vaga, contendo as informações:
+
+   - Cargo ou Função
+
+   - Descrição 
+
+   - Forma de contratação 
+    
+   - Local de contratação
+    
+   - Critérios de habilidade e perfil para a vaga
+
+2. A ator preenche o formulário de cadastro geral da vaga
+
+3. O sistema apresenta formulário de critérios da vaga:
+   - Nome do critério
+   - Descrição
+   - PMD (Perfil Mínimo Desejado): 1- Desejável; 2 - Diferencial; 3- Relevante, 4 - Muito relevante e 5 - Obrigatório
+   - Peso do critério
+
+4. O ator preenche o formulário de critérios de vaga
+   
+5. O ator _Empresa_ finaliza a publicação da vaga, através do botão Publicar Vaga;
+
+6. O sistema publica a vaga;
+
+**Fluxo alternativo**:
+
+Passo 5: Dados da Vaga inválidos
+1. O sistema apresenta janela de erro com a mensagem: &quot;Dados de preenchimento inválidos. Por favor, confira o formulário e tente novamente&quot;;
+2. O ator confirma a mensagem de erro;
+3. O sistema retorna para o passo 4;
+
+
+## Responder Vaga
+
+**Objetivo** : Permitir que o Candidato responda as vagas de emprego publicadas.
+
+**Atores** : Candidato, Empresa.
+
+**Condição de entrada** : Vaga devidamente publicada pelo ator Empresa. Usuário do tipo Candidato devidamente autenticado, seleciona o menu "Dashboard", verifica uma das vagas publicadas e logo após clica no botão &quot;Responder Vaga&quot;.
+
+**Condição de saída**: Uma resposta a vaga de emprego será publicada e poderá ser consultada pelo ator Empresa.
+
+**Fluxo principal** :
+
+1. O sistema apresenta formulário de visualização dos atributos da vaga, contendo as informações:
+
+   - Cargo ou Função
+
+   - Descrição 
+
+   - Forma de contratação 
+    
+   - Local de contratação
+    
+   - Critérios de habilidade e perfil para a vaga
+
+2. A ator verifica os dados constantes do formulário
+
+3. O sistema apresenta formulário de critérios da vaga, para cada criterio previamente estabelecido para a vaga em questão, contendo os seguintes campos:
+   - Nome do critério (apenas visualização)
+   - Descrição (apenas visualização)
+   - Perfil: 1- Desejável; 2 - Diferencial; 3- Relevante, 4 - Muito relevante e 5 - Obrigatório (campo selecionável)
+
+4. Para cada um dos critérios da vaga, o ator **Candidato** preenche o campo Perfil, indicando sua experiência para o respectivo critério de seleção.
+   
+5. O ator _Candidato_ finaliza a resposta da vaga, através do botão Responder Vaga.
+
+6. O sistema publica a resposta de vaga;
+
+**Fluxo alternativo**:
+
+Passo 5: Critérios da Vaga não preenchidos ou inválidos
+1. O sistema apresenta janela de erro com a mensagem: &quot;Dados de preenchimento de critério de vaga inválidos. Por favor, confira o formulário e tente novamente&quot;;
+2. O ator confirma a mensagem de erro;
+3. O sistema retorna para o passo 4;
 
 
 # Modelagem do sistema
